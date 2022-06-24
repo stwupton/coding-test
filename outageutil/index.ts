@@ -31,7 +31,7 @@ const states: HealthState[] = [];
 for (const game of games) {
   for (const [endpoint, urlTemplate] of endpoints) {
     const url: string = urlTemplate.replace('{gamecode}', game);
-    const state: HealthState = { game, endpoint, url, timedOut: false };
+    const state: HealthState = { game, endpoint, url };
     states.push(state);
 
     checkHealth(state, interval);
