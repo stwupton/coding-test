@@ -38,4 +38,4 @@ for (const game of games) {
   }
 }
 
-startLog(states, interval);
+startLog(states, 60000);
