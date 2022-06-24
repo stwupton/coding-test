@@ -10,6 +10,10 @@
  * See log.txt for example output.
  */
 
+import { checkHealth } from './check_health';
+import { HealthState } from './health_state';
+import { startLog } from './log';
+
 // Interval in MS to check health
 const interval = 5000;
 
@@ -21,3 +25,17 @@ const endpoints = [
   ['staging', 'https://api.staging.hoellespiele.com/gameapi/game-{gamecode}/health'],
   ['europe-1', 'https://api.europe-1.hoelle.games/gameapi/game-{gamecode}/health'],
 ];
+
+const states: HealthState[] = [];
+
+for (const game of games) {
+  for (const [endpoint, urlTemplate] of endpoints) {
+    const url: string = urlTemplate.replace('{gamecode}', game);
+    const state: HealthState = { game, endpoint, url, timedOut: false };
+    states.push(state);
+
+    checkHealth(state, interval);
+  }
+}
+
+startLog(states, interval);
