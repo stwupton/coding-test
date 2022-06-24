@@ -10,7 +10,7 @@
 
 interface Winline {
   count: number;
-  offsets: number;
+  offsets: number[];
   payout: number;
   symbol: number;
 }
@@ -50,7 +50,29 @@ const exampleReelMatrix3 = [
 ];
 
 function getWinlines(reelMatrix: number[][]): Winline[] {
-  return [];
+  const winlines: Winline[] = [];
+
+  for (const offsets of winlineOffsets) {
+    const symbol: number = reelMatrix[offsets[0]][0];
+    
+    let count = 0;
+    for (let x = 0; x < offsets.length; x++) {
+      const y: number = offsets[x];
+
+      if (reelMatrix[y][x] === symbol) {
+        count++;
+      } else {
+        break;
+      }
+    }
+
+    if (count > 2) {
+      const payout: number = symbolPayouts[symbol][count - 1];
+      winlines.push({ count, offsets, payout, symbol });
+    }
+  }
+
+  return winlines;
 }
 
 /**
@@ -68,9 +90,9 @@ console.assert(
 console.assert(
   JSON.stringify(getWinlines(exampleReelMatrix2)) ===
     JSON.stringify([
-      { count: 4, offsets: [0, 0, 0, 0, 0], payout: 10, symbol: 4 },
-      { count: 3, offsets: [0, 1, 2, 1, 0], payout: 5, symbol: 4 },
-      { count: 3, offsets: [2, 1, 0, 1, 2], payout: 5, symbol: 4 },
+      { count: 4, offsets: [0, 0, 0, 0, 0], payout: 20, symbol: 4 },
+      { count: 3, offsets: [0, 1, 2, 1, 0], payout: 10, symbol: 4 },
+      { count: 3, offsets: [2, 1, 0, 1, 2], payout: 10, symbol: 4 },
     ]),
 );
 
