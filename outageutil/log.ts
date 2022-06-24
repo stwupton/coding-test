@@ -13,7 +13,7 @@ function logHealth(states: HealthState[]): void {
       report = report.replace('{endpoint}', state.endpoint);
 
       const timeElapsed: number = Date.now() - state.timeoutTimestamp;
-      report = report.replace('{minutes}', Math.round(timeElapsed / 1000 / 60).toString());
+      report = report.replace('{minutes}', Math.floor(timeElapsed / 1000 / 60).toString());
 
       output += report;
     }
